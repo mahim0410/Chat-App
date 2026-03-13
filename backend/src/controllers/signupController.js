@@ -1,6 +1,9 @@
 import bcrypt from 'bcryptjs';
+// import { Resend } from 'resend';
 import authModel from "../models/user.model.js"
 import generateToken from "../lib/utils.js"
+
+// custom email send on signup yet to be added cause to send email to users, dynamically you need to have a verified domain
 
 export const signup = async (req, res) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
@@ -40,8 +43,26 @@ export const signup = async (req, res) => {
         else {
             await user.save();
             generateToken(user._id, res)
+
+
+
+            // try {
+            //     const resend = new Resend('re_WokDfNHB_Az1uGj1Zyi9La2bk4XKpAiGL');
+            //     await resend.emails.send({
+            //         from: 'Chat App <onboarding@resend.dev>',
+            //         to: ['mahidulislam3397@gmail.com'],
+            //         subject: 'hello world',
+            //         html: '<p>it works!</p>',
+            //     });
+            // } catch (error) {
+            //     res.status(500).json({ error: "Error in the resend" })
+            //     console.log(`The error is in resend. Error: ${error}`)
+
+            // }
+
             return res.status(201).json({ message: "User created successfully" })
         }
+
 
     } catch (error) {
         res.status(500).json({ error: "The error is in signup controller" })
