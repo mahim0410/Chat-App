@@ -1,6 +1,6 @@
 import express from "express";
-import { signup } from "../controllers/signupController.js";
-import { login } from "../controllers/loginController.js";
+import { signup, login, logout } from "../controllers/authController.js";
+
 
 
 const route = express.Router()
@@ -8,7 +8,7 @@ const route = express.Router()
 
 route.post("/signup", signup)
 route.post("/login", login)
-// route.post("/signup", logout)
+route.post("/logout", logout)
 
 
 
