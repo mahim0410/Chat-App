@@ -5,12 +5,14 @@ import userModel from "../models/user.model.js";
 export const protectRoutes = async (req, res, next) => {
     const token = req.cookies.Token
     try {
-        if (!token) {
-            return res.status(400).json({ message: "User not logged in" })
-        }
+        if (!token) return res.status(400).json({ message: "User not logged in" })
+
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        if (!decoded) return res.status(400).json({ message: "Invalid token" })
+
         const user = await userModel.findById(decoded.id).select("-password")
-        console.log(user)
+        if (!user) return res.status(400).json({ message: "User not found" })
+
         req.user = user
         next()
 
