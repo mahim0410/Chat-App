@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import 'dotenv/config';
 import express from "express";
 import cookieParser from "cookie-parser"
@@ -11,6 +10,7 @@ const app = express()
 const __dirname = path.resolve();
 
 const port = process.env.PORT
+
 
 app.use(express.json())
 app.use(cookieParser());

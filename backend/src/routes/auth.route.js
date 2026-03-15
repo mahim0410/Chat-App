@@ -3,17 +3,22 @@ import multer from "multer"
 import { signup, login, logout } from "../controllers/authController.js";
 import { updateProfilePic } from "./updateProfile.route.js";
 import { protectRoutes } from "../middleware/auth.middleware.js";
+import arcjetProtection from "../middleware/arcjet.js"
 
 
-const route = express.Router()
+const router = express.Router()
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-route.post("/signup", signup)
-route.post("/login", login)
-route.post("/logout", logout)
+router.use(arcjetProtection)
 
-route.put("/update-profile", upload.single("profilePic"), protectRoutes, updateProfilePic)
+router.post("/signup", signup)
+router.post("/login", login)
+router.post("/logout", logout)
+
+router.put("/update-profile", protectRoutes, upload.single("profilePic"), updateProfilePic)
+
+router.get("/check", protectRoutes, (req, res) => res.status(200).json(req.user))
 
 
-export default route;
+export default router;
