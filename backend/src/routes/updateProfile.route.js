@@ -14,7 +14,6 @@ export const updateProfilePic = async (req, res) => {
         const img = uploadedImg.secure_url
 
         const id = req.user._id
-        console.log(id)
         await userModel.findByIdAndUpdate(id, { $set: { profilePic: img } })
 
         res.status(200).json({ message: "Profile pic updated successfully" })

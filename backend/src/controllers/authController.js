@@ -18,7 +18,7 @@ export const signup = async (req, res) => {
             return res.status(422).json({ message: "Invalid email format" })
         }
 
-        const userEmail = await authModel.findOne({ email: email })
+        const userEmail = await userModel.findOne({ email: email })
 
         if (userEmail) {
             return res.status(400).json({ message: "Email already exists, try with a different one" })
@@ -31,7 +31,7 @@ export const signup = async (req, res) => {
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
 
-        const user = new authModel({
+        const user = new userModel({
             fullname: fullname.trim(),
             email: email.toLowerCase(),
             password: hashedPassword
@@ -43,22 +43,6 @@ export const signup = async (req, res) => {
         else {
             await user.save();
             generateToken(user._id, res)
-
-
-
-            // try {
-            //     const resend = new Resend('re_WokDfNHB_Az1uGj1Zyi9La2bk4XKpAiGL');
-            //     await resend.emails.send({
-            //         from: 'Chat App <onboarding@resend.dev>',
-            //         to: ['mahidulislam3397@gmail.com'],
-            //         subject: 'hello world',
-            //         html: '<p>it works!</p>',
-            //     });
-            // } catch (error) {
-            //     res.status(500).json({ error: "Error in the resend" })
-            //     console.log(`The error is in resend. Error: ${error}`)
-
-            // }
 
             return res.status(201).json({ message: "User created successfully" })
         }

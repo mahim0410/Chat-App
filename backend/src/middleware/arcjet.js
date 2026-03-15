@@ -10,12 +10,12 @@ const aj = arcjet({
             interval: 10,
             capacity: 10,
         }),
-        detectBot({
-            mode: "LIVE",
-            allow: [
-                "CATEGORY:SEARCH_ENGINE"
-            ],
-        }),
+        // detectBot({
+        //     mode: "LIVE",
+        //     allow: [
+        //         "CATEGORY:SEARCH_ENGINE"
+        //     ],
+        // }),
         shield({ mode: "LIVE" }),
     ]
 })
