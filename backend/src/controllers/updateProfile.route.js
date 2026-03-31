@@ -3,7 +3,7 @@ import cloudinary from "../lib/cloudinary.js"
 
 
 export const updateProfilePic = async (req, res) => {
-    const buffer = req.file.buffer
+    let buffer = req.file.buffer
     const file = `data:${req.file.mimetype};base64,${buffer.toString('base64')}`
     try {
 
@@ -20,6 +20,6 @@ export const updateProfilePic = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ message: "Internal server error" })
-        console.log(`Error is in the updateProfilePic function. Error: ${error}`)
+        console.log("Error is in the updateProfilePic function. Error:", error)
     }
 }

@@ -87,10 +87,10 @@ export const login = async (req, res) => {
 
 export const logout = async (_, res) => {
     try {
-        res.cookies("token", "", { maxAge: 0 })
+        res.cookie("Token", "", { maxAge: 0 })
         res.status(200).json({ message: "Logout Successful" })
     } catch (error) {
         console.log(`Error in the logout controller. Error: ${error}`)
-        res.status(200).json({ message: "Logout Successful" })
+        res.status(400).json({ message: "Logout unsucessful" })
     }
 }

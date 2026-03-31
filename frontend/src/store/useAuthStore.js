@@ -40,17 +40,43 @@ export const useAuthStore = create((set) => ({
 
     signin: async (data) => {
         try {
-            set({ inSigningIn: true })
+            set({ isSigningIn: true })
             const res = await axios.post("http://localhost:3000/api/auth/login", data, { withCredentials: true })
             set({ authUser: res.data });
             toast.success("Log in Successful")
         } catch (error) {
             toast.error(error.res.data.message)
         } finally {
-            set({ isSigningIn: true })
+            set({ isSigningIn: false })
         }
 
+    },
+
+    logout: async () => {
+        try {
+            await axios.get("http://localhost:3000/api/auth/logout")
+            set({ authUser: null });
+            toast.success("Logged out successfully");
+        } catch (error) {
+            toast.error("Error logging out");
+            console.log("Logout error:", error);
+        }
+    },
+
+    updateProfile: async (data) => {
+        try {
+            await axios.put(
+                "http://localhost:3000/api/auth/update-profile",
+                formData,
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                    withCredentials: true
+                }
+
+            );
+            toast.success("Profile pic updated successfully")
+        } catch (error) {
+            console.log("Error in update profile", error)
+        }
     }
-
-
 }));

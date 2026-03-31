@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer"
 import { signup, login, logout } from "../controllers/authController.js";
-import { updateProfilePic } from "./updateProfile.route.js";
+import { updateProfilePic } from "../controllers/updateProfile.route.js";
 import { protectRoutes } from "../middleware/auth.middleware.js";
 import arcjetProtection from "../middleware/arcjet.js"
 
