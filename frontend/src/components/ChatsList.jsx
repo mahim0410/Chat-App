@@ -21,7 +21,7 @@ const ChatsList = () => {
     if (chats.length === 0) {
         return <NoChatsFound />
     }
-    console.log("This is my chat: ", chats)
+
     return (
 
 

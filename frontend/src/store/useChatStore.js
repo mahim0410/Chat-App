@@ -19,10 +19,12 @@ export const useChatStore = create((set) => ({
     getAllContacts: async () => {
         set({ isUserLoading: true, })
         try {
-            const res = await axios.get("http://localhost:3000/api/message/contacts")
-            set({ allContacts: res.data })
+            const res = await axios.get("http://localhost:3000/api/message/contacts", { withCredentials: true })
+            console.log("API response:", res.data.message)
+            set({ allContacts: res.data.message })
         } catch (error) {
-            toast.error(error.res.data.message)
+            toast.error(error.response?.data?.message || "Something went wrong")
+
 
         } finally {
             set({ isUserLoading: false })
