@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import toast from "react-hot-toast";
 import { create } from "zustand";
 
 export const useChatStore = create((set) => ({
@@ -32,10 +32,10 @@ export const useChatStore = create((set) => ({
     getMyChatPartners: async () => {
         set({ isUserLoading: true, })
         try {
-            const res = await axios.get("http://localhost:3000/api/message/chats")
+            const res = await axios.get("http://localhost:3000/api/message/chats", { withCredentials: true })
             set({ chats: res.data })
         } catch (error) {
-            toast.error(error.res.data.message)
+            toast.error(error.response.data.message)
 
         } finally {
             set({ isUserLoading: false })

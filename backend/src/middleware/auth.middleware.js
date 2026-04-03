@@ -3,11 +3,13 @@ import userModel from "../models/user.model.js";
 
 
 export const protectRoutes = async (req, res, next) => {
-    const token = req.cookies.Token
+    const Token = req.cookies.Token
     try {
-        if (!token) return res.status(400).json({ message: "User not logged in" })
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+        if (!Token) return res.status(400).json({ message: "User not logged in" })
+
+        const decoded = jwt.verify(Token, process.env.JWT_SECRET)
         if (!decoded) return res.status(400).json({ message: "Invalid token" })
 
         const user = await userModel.findById(decoded.id).select("-password")

@@ -38,20 +38,20 @@ export const sendMessage = async (req, res) => {
         const { id: receiverId } = req.params
         const { text } = req.body
 
-        let imgeUrl;
-        const buffer = req.file.buffer
+        // let imgeUrl;
+        // const buffer = req.file.buffer
 
-        if (buffer) {
-            const file = `data:${req.file.mimetype};base64,${buffer.toString('base64')}`
-            const uploadedImg = await cloudinary.uploader.upload(file)
-            imgeUrl = uploadedImg.secure_url
-        }
+        // if (buffer) {
+        //     const file = `data:${req.file.mimetype};base64,${buffer.toString('base64')}`
+        //     const uploadedImg = await cloudinary.uploader.upload(file)
+        //     imgeUrl = uploadedImg.secure_url
+        // }
 
         const message = new messageModel({
             senderId: messageSenderId,
             receiverId: receiverId,
             text: text,
-            img: imgeUrl,
+            // img: imgeUrl,
         })
 
         await message.save();
