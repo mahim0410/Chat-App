@@ -54,7 +54,7 @@ export const useAuthStore = create((set) => ({
 
     logout: async () => {
         try {
-            await axios.get("http://localhost:3000/api/auth/logout")
+            await axios.post("http://localhost:3000/api/auth/logout")
             set({ authUser: null });
             toast.success("Logged out successfully");
         } catch (error) {
@@ -67,7 +67,7 @@ export const useAuthStore = create((set) => ({
         try {
             await axios.put(
                 "http://localhost:3000/api/auth/update-profile",
-                formData,
+                data,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
                     withCredentials: true

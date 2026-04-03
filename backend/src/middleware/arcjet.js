@@ -21,7 +21,7 @@ const aj = arcjet({
 })
 
 const arcjetProtection = async (req, res, next) => {
-    const decision = await aj.protect(req, { requested: 5 }); // Deduct 5 tokens from the bucket
+    const decision = await aj.protect(req, { requested: 2 }); // Deduct 5 tokens from the bucket
     if (decision.isDenied()) {
         if (decision.reason.isRateLimit()) {
             res.status(429).json({ error: "Too Many Requests" });
