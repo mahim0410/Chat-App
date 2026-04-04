@@ -1,7 +1,7 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import ChatPage from "./pages/chatPage.jsx";
-import LoginPage from "./pages/logInPage.jsx";
+import LoginPage from "./pages/loginPage.jsx";
 import SignUpPage from "./pages/signUpPage.jsx";
 import { useAuthStore } from "./store/useAuthStore.js";
 import PageLoader from "./components/PageLoader.jsx";
