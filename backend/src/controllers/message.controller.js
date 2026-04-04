@@ -56,7 +56,7 @@ export const sendMessage = async (req, res) => {
 
         await message.save();
 
-        res.status(201).json({ message: "Message stored successfully" })
+        res.status(201).json({ message: message })
 
     } catch (error) {
         res.status(500).json({ error: "The error is in getMessagesByUserId controller" })

@@ -33,8 +33,8 @@ function ChatContainer() {
         getMessagesByUserId,
         messages,
         isMessagesLoading,
-        subscribeToMessages,
-        unsubscribeFromMessages,
+        // subscribeToMessages,
+        // unsubscribeFromMessages,
     } = useChatStore();
     const { authUser } = useAuthStore();
     const messageEndRef = useRef(null);
@@ -43,15 +43,15 @@ function ChatContainer() {
         getMessagesByUserId(selectedUser._id);
         // subscribeToMessages();
 
-        // // clean up
-        // return () => unsubscribeFromMessages();
-    }, [selectedUser, getMessagesByUserId, subscribeToMessages, unsubscribeFromMessages]);
+        // clean up
+        return () => unsubscribeFromMessages();
+    }, [selectedUser, getMessagesByUserId,]);
 
-    // useEffect(() => {
-    //     if (messageEndRef.current) {
-    //         messageEndRef.current.scrollIntoView({ behavior: "smooth" });
-    //     }
-    // }, [messages]);
+    useEffect(() => {
+        if (messageEndRef.current) {
+            messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages]);
 
     return (
         <>
@@ -59,9 +59,9 @@ function ChatContainer() {
             <div className="flex-1 px-6 overflow-y-auto py-8">
                 {messages.length > 0 && !isMessagesLoading ? (
                     <div className="max-w-3xl mx-auto space-y-6">
-                        {messages.map((msg) => (
+                        {messages.map((msg, idx) => (
                             <div
-                                key={msg._id}
+                                key={idx}
                                 className={`chat ${msg.senderId === authUser._id ? "chat-end" : "chat-start"}`}
                             >
                                 <div
