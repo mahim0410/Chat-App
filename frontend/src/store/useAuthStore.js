@@ -3,7 +3,7 @@ import { axiosInstance } from "../lib/axios.js";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-export const useAuthStore = create((set) => ({
+export const useAuthStore = create((set, get) => ({
     authUser: null,
     isCheckingAuth: true,
     isSigningUp: false,
@@ -45,7 +45,7 @@ export const useAuthStore = create((set) => ({
             set({ authUser: res.data });
             toast.success("Log in Successful")
         } catch (error) {
-            toast.error(error.res.data.message)
+            toast.error(error.response.data.message)
         } finally {
             set({ isSigningIn: false })
         }
@@ -54,7 +54,7 @@ export const useAuthStore = create((set) => ({
 
     logout: async () => {
         try {
-            await axios.post("http://localhost:3000/api/auth/logout")
+            await axios.post("http://localhost:3000/api/auth/logout", {}, { withCredentials: true })
             set({ authUser: null });
             toast.success("Logged out successfully");
         } catch (error) {
