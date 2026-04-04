@@ -1,29 +1,8 @@
-// import React, { useEffect } from 'react'
-// import { useChatStore } from '../store/useChatStore.js'
-// import ChatHeader from './ChatHeader.jsx'
-
-// const ChatContainer = () => {
-//     const { getMessagesByUserId, selectedUser, messages } = useChatStore()
-//     useEffect(() => {
-//         getMessagesByUserId(selectedUser._id)
-//     }, [selectedUser, getMessagesByUserId])
-//     console.log('my messages', messages)
-//     return (
-//         <div><ChatHeader /></div>
-//     )
-// }
-
-// export default ChatContainer
-
-
-
-
-
 import { useEffect, useRef } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import ChatHeader from './ChatHeader.jsx'
-import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceholder";
+import NoChatHistoryPlaceholder from "./NoChatHistoryPlaceHolder";
 import MessageInput from "./MessageInput";
 import MessagesLoadingSkeleton from "./MessagesLoadingSkeleton";
 
