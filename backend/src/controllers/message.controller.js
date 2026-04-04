@@ -23,7 +23,7 @@ export const getMessagesByUserId = async (req, res) => {
                 { senderId: myId, receiverId: userToChatId }
             ]
         })
-        res.status(500).json({ message: messages })
+        res.status(200).json({ message: messages })
 
     } catch (error) {
         res.status(500).json({ error: "The error is in getMessagesByUserId controller" })

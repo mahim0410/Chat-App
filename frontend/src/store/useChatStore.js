@@ -20,19 +20,16 @@ export const useChatStore = create((set) => ({
         set({ isUserLoading: true, })
         try {
             const res = await axios.get("http://localhost:3000/api/message/contacts", { withCredentials: true })
-            console.log("API response:", res.data.message)
             set({ allContacts: res.data.message })
         } catch (error) {
             toast.error(error.response?.data?.message || "Something went wrong")
-
-
         } finally {
             set({ isUserLoading: false })
         }
     },
 
     getMyChatPartners: async () => {
-        set({ isUserLoading: true, })
+        set({ isUserLoading: true })
         try {
             const res = await axios.get("http://localhost:3000/api/message/chats", { withCredentials: true })
             set({ chats: res.data })
@@ -43,4 +40,24 @@ export const useChatStore = create((set) => ({
             set({ isUserLoading: false })
         }
     },
+
+
+    getMessagesByUserId: async (userId) => {
+        set({ isMessagesLoading: true })
+        try {
+            const res = await axios.get(`http://localhost:3000/api/message/${userId}`, { withCredentials: true })
+            set({ messages: res.data.message })
+
+        } catch (error) {
+            toast.error(error.response.data.message)
+
+
+        } finally {
+            set({ isMessagesLoading: false })
+        }
+    },
 }))
+
+
+
+
