@@ -12,6 +12,7 @@ const io = new Server(server, {
         origin: [process.env.CLIENT_URL],
         credentials: true,
     },
+    allowEIO3: true,
 });
 
 // apply authentication middleware to all socket connections

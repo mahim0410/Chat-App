@@ -1,4 +1,4 @@
-import axios from "axios";
+import { axiosInstance } from "../lib/axios.js";  // ✅ use axiosInstance, not raw axios
 import toast from "react-hot-toast";
 import { create } from "zustand";
 import { useAuthStore } from "./useAuthStore.js";
@@ -12,16 +12,14 @@ export const useChatStore = create((set, get) => ({
     isUserLoading: false,
     isMessagesLoading: false,
 
-
     setActiveTab: (tab) => set({ activeTab: tab }),
-    setSelectedUser: (selectedUser) => set({ selectedUser: selectedUser }),
-
+    setSelectedUser: (selectedUser) => set({ selectedUser }),
 
     getAllContacts: async () => {
-        set({ isUserLoading: true, })
+        set({ isUserLoading: true })
         try {
-            const res = await axios.get("http://localhost:3000/api/message/contacts", { withCredentials: true })
-            set({ allContacts: res.data.message })
+            const res = await axiosInstance.get("/message/contacts")  // ✅
+            set({ allContacts: Array.isArray(res.data) ? res.data : [] })  // ✅ don't use .message
         } catch (error) {
             toast.error(error.response?.data?.message || "Something went wrong")
         } finally {
@@ -32,87 +30,77 @@ export const useChatStore = create((set, get) => ({
     getMyChatPartners: async () => {
         set({ isUserLoading: true })
         try {
-            const res = await axios.get("http://localhost:3000/api/message/chats", { withCredentials: true })
-            set({ chats: res.data })
+            const res = await axiosInstance.get("/message/chats")  // ✅
+            set({ chats: Array.isArray(res.data) ? res.data : [] })  // ✅ safe array check
         } catch (error) {
-            toast.error(error.response.data.message)
-
+            toast.error(error.response?.data?.message || "Something went wrong")  // ✅ optional chaining
         } finally {
             set({ isUserLoading: false })
         }
     },
 
-
     getMessagesByUserId: async (userId) => {
         set({ isMessagesLoading: true })
         try {
-            const res = await axios.get(`http://localhost:3000/api/message/${userId}`, { withCredentials: true })
-            set({ messages: res.data.message })
-
+            const res = await axiosInstance.get(`/message/${userId}`)  // ✅
+            set({ messages: Array.isArray(res.data) ? res.data : [] })  // ✅ don't use .message
         } catch (error) {
-            toast.error(error.response.data.message)
-
-
+            toast.error(error.response?.data?.message || "Something went wrong")  // ✅
         } finally {
             set({ isMessagesLoading: false })
         }
     },
 
-
     sendMessage: async (messageData) => {
-        const { selectedUser, messages } = get();
-        const { authUser } = useAuthStore.getState();
+        const { selectedUser, messages } = get()
+        const { authUser } = useAuthStore.getState()
 
-        const tempId = `temp-${Date.now()}`;
-
+        // optimistic update
         const optimisticMessage = {
-            _id: tempId,
+            _id: `temp-${Date.now()}`,
             senderId: authUser._id,
             receiverId: selectedUser._id,
             text: messageData.text,
-            image: messageData.image,
+            img: messageData.img,          // ✅ use "img" to match your schema
             createdAt: new Date().toISOString(),
-            isOptimistic: true, // flag to identify optimistic messages (optional)
-        };
-        // immidetaly update the ui by adding the message
-        set({ messages: [...messages, optimisticMessage] });
+            isOptimistic: true,
+        }
 
-
+        set({ messages: [...messages, optimisticMessage] })
 
         try {
-            const res = await axios.post(`http://localhost:3000/api/message/send/${selectedUser._id}`, messageData, { withCredentials: true });
-            set({ messages: messages.concat(res.data.message) });
+            const res = await axiosInstance.post(  // ✅
+                `/message/send/${selectedUser._id}`,
+                messageData
+            )
+            // ✅ replace optimistic message with real one from server
+            set({
+                messages: messages
+                    .filter(m => m._id !== optimisticMessage._id)
+                    .concat(res.data)   // ✅ res.data directly, not res.data.message
+            })
         } catch (error) {
-            // remove optimistic message on failure
-            set({ messages: messages });
-            toast.error(error.response?.data?.message || "Something went wrong");
+            set({ messages })  // revert optimistic update
+            toast.error(error.response?.data?.message || "Something went wrong")
         }
     },
 
-
-
     subscribeToMessages: () => {
-        const { selectedUser } = get();
-        if (!selectedUser) return;
+        const { selectedUser } = get()
+        if (!selectedUser) return
 
-        const socket = useAuthStore.getState().socket;
+        const socket = useAuthStore.getState().socket
+        if (!socket) return  // ✅ guard against null socket
 
-        socket.on("message", (message) => {
-            const isMessageSentFromSelectedUser = message.senderId === selectedUser._id;
-            if (!isMessageSentFromSelectedUser) return;
-
-            const currentMessages = get().messages;
-            set({ messages: [...currentMessages, message] });
-
-
-        });
+        socket.on("newMessage", (message) => {  // ✅ check your backend event name
+            if (message.senderId !== selectedUser._id.toString()) return
+            set({ messages: [...get().messages, message] })
+        })
     },
 
     unsubscribeFromMessages: () => {
-        const socket = useAuthStore.getState().socket;
-        socket.off("message");
+        const socket = useAuthStore.getState().socket
+        if (!socket) return  // ✅ guard against null socket
+        socket.off("newMessage")  // ✅ must match event name in subscribeToMessages
     },
-}));
-
-
-
+}))
