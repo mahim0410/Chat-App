@@ -7,7 +7,7 @@ export const getAllContacts = async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
         const filteredUsers = await userModel.find({ _id: { $ne: loggedInUserId } }).select("-password")
-        res.status(200).json({ message: filteredUsers })
+        res.status(200).json(filteredUsers)
     } catch (error) {
         res.status(500).json({ error: "The error is in getAllContacts controller" })
         console.log(`Error is in the getAllContacts controller. Error: ${error}`)
@@ -24,7 +24,7 @@ export const getMessagesByUserId = async (req, res) => {
                 { senderId: myId, receiverId: userToChatId }
             ]
         })
-        res.status(200).json({ message: messages })
+        res.status(200).json(messages)
 
     } catch (error) {
         res.status(500).json({ error: "The error is in getMessagesByUserId controller" })
@@ -63,7 +63,7 @@ export const sendMessage = async (req, res) => {
             io.to(receiverSocketId).emit("message", message);
         }
 
-        res.status(201).json({ message: message })
+        res.status(201).json(message)
 
     } catch (error) {
         res.status(500).json({ error: "The error is in getMessagesByUserId controller" })
