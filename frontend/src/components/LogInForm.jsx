@@ -47,7 +47,7 @@ const LogInForm = () => {
                                 <input type="password" className="input w-3/4" placeholder="Enter your password" value={password} onChange={(e) => {
                                     setPassword(e.target.value)
                                 }} />
-                                <div><Link className="link link-hover" to={"/login"}>Don't have an account? Sign up</Link></div>
+                                <div><Link className="link link-hover" to={"/signup"}>Don't have an account? Sign up</Link></div>
                                 <button className="btn btn-neutral mt-5 font-semibold" onClick={handleSignin}>Sign in</button>
                             </fieldset>
                         </div>
