@@ -9,6 +9,8 @@ export const socketAuthMiddleware = async (socket, next) => {
             .find((row) => row.startsWith("Token="))
             ?.split("=")[1];
 
+        console.log(token)
+
         if (!token) {
             console.log("Socket connection rejected: No token provided");
             return next(new Error("Unauthorized - No Token Provided"));
