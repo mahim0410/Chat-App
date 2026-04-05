@@ -89,8 +89,30 @@ export const useChatStore = create((set, get) => ({
         }
     },
 
-}))
 
+
+    subscribeToMessages: () => {
+        const { selectedUser } = get();
+        if (!selectedUser) return;
+
+        const socket = useAuthStore.getState().socket;
+
+        socket.on("message", (message) => {
+            const isMessageSentFromSelectedUser = message.senderId === selectedUser._id;
+            if (!isMessageSentFromSelectedUser) return;
+
+            const currentMessages = get().messages;
+            set({ messages: [...currentMessages, message] });
+
+
+        });
+    },
+
+    unsubscribeFromMessages: () => {
+        const socket = useAuthStore.getState().socket;
+        socket.off("message");
+    },
+}));
 
 
 

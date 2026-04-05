@@ -66,7 +66,6 @@ function ProfileHeader() {
                     </div>
                 </div>
 
-                {/* BUTTONS */}
                 <div className="flex gap-4 items-center">
                     {/* LOGOUT BTN */}
                     <button
