@@ -24,7 +24,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api/auth', authRoutes)
 app.use("/api/message", messageRoutes)
 
-
 // for deployement
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "../frontend/dist")))
@@ -36,6 +35,6 @@ if (process.env.NODE_ENV === "production") {
 
 
 server.listen(port, () => {
-    console.log(`server is running smoothly`)
+    console.log(`server is running super smooth`)
     connectDB()
 })
