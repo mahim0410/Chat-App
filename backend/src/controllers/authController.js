@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 // import { Resend } from 'resend';
 import userModel from "../models/user.model.js"
 import generateToken from "../lib/utils.js"
+import sendSignUpMail from '../lib/sendSignUpMail.js';
 
 // custom email send on signup yet to be added cause to send email to users, dynamically you need to have a verified domain
 
@@ -44,6 +45,8 @@ export const signup = async (req, res) => {
             await user.save();
             generateToken(user._id, res)
 
+
+
             // return res.status(201).json({ message: "User created successfully" })
             res.status(201).json({
                 _id: user._id,
@@ -51,6 +54,8 @@ export const signup = async (req, res) => {
                 email: user.email,
                 profilePic: user.profilePic
             })
+
+            sendSignUpMail(email);
         }
 
 

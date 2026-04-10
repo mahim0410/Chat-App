@@ -10,18 +10,18 @@ const aj = arcjet({
             interval: 10,
             capacity: 10,
         }),
-        // detectBot({
-        //     mode: "LIVE",
-        //     allow: [
-        //         "CATEGORY:SEARCH_ENGINE"
-        //     ],
-        // }),
+        detectBot({
+            mode: "LIVE",
+            allow: [
+                "CATEGORY:SEARCH_ENGINE"
+            ],
+        }),
         shield({ mode: "LIVE" }),
     ]
 })
 
 const arcjetProtection = async (req, res, next) => {
-    const decision = await aj.protect(req, { requested: 0 }); // Deduct 5 tokens from the bucket
+    const decision = await aj.protect(req, { requested: 5 });
     if (decision.isDenied()) {
         if (decision.reason.isRateLimit()) {
             res.status(429).json({ error: "Too Many Requests" });
