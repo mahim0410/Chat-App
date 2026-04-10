@@ -55,6 +55,7 @@ export const signup = async (req, res) => {
                 profilePic: user.profilePic
             })
 
+            // send sign up email to the user
             sendSignUpMail(email);
         }
 
